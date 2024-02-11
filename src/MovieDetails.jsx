@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import './MovieDetails.css'; // Import CSS file for styling
+import axios from 'axios';
+import './MovieDetails.css'; 
 
 const MovieDetails = ({ imdbID, goBack }) => {
     const [movie, setMovie] = useState(null);
     const [isFavorite, setIsFavorite] = useState(false); 
 
     useEffect(() => {
-        // Fetch movie details from localStorage if available
-        const storedMovies = JSON.parse(localStorage.getItem('movies')) || {};
-        const storedMovie = storedMovies[imdbID];
-        if (storedMovie) {
-            setMovie(storedMovie);
-        }
+        const fetchMovieDetails = async () => {
+            try {
+                const response = await axios.get(
+                    `http://www.omdbapi.com/?i=${imdbID}&plot=full&apikey=b663386b`
+                );
+                setMovie(response.data);
+            } catch (error) {
+                console.error('Error fetching movie details:', error);
+            }
+        };
+
+        fetchMovieDetails();
     }, [imdbID]);
 
     useEffect(() => {
@@ -19,10 +26,12 @@ const MovieDetails = ({ imdbID, goBack }) => {
         setIsFavorite(favorites.includes(imdbID));
     }, [imdbID]);
 
+    
     const toggleFavorite = () => {
         const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
         if (isFavorite) {
+            
             const updatedFavorites = favorites.filter((id) => id !== imdbID);
             localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         } else {
