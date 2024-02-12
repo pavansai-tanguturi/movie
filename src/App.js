@@ -9,9 +9,9 @@ const API_ULR = 'http://www.omdbapi.com?apikey=b663386b';
 
 const App = () => {
     const [movies, setMovies] = useState([]);
-    const [selectedMovie, setSelectedMovie] = useState(null); // Track selected movie
+    const [selectedMovie, setSelectedMovie] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [viewFavorites, setViewFavorites] = useState(false); // State to toggle viewing favorites
+    const [viewFavorites, setViewFavorites] = useState(false);
 
     const searchMovies = async (title) => {
         const response = await fetch(`${API_ULR}&s=${title}`);
